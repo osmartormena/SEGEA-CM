@@ -2,12 +2,12 @@
 clear
 clc
 
-%% Definições iniciais
+%% Definições gerais
 timestamp = replace(string(datetime), {' ', ':'}, '.');
 saida = join(["fet/utfpr-cm-",timestamp,".fet"], '');
-preambulo = "preambulo.xml";
 
 %% Escrita do Preâmbulo do XML
+preambulo = "preambulo.xml";
 arquivoFET = fopen(saida, 'w');
 preXML = fopen(preambulo);
 fwrite(arquivoFET, fread(preXML));
@@ -15,7 +15,17 @@ fprintf(arquivoFET, "\n");
 fclose(preXML);
 
 %% Escrita da lista de disciplinas
+matrizes = "data/Matrizes.csv";
+M = carregaMatrizes(matrizes);
+[numDisciplinas, ~] = size(M);
 fprintf(arquivoFET, "<Subjects_List>\n");
+for n = 1:numDisciplinas
+    fprintf(arquivoFET, "<Subject>\n");
+    fprintf(arquivoFET, "\t<Name>%s: %s</Name>\n", M.Codigo(n), ...
+        M.Disciplina(n));
+    fprintf(arquivoFET, "\t<Comments>Matriz %s</Comments>\n", M.Matriz(n));
+    fprintf(arquivoFET, "</Subject>\n");
+end
 fprintf(arquivoFET, "</Subjects_List>\n\n");
 
 %% Escrita dos marcadores de atividades

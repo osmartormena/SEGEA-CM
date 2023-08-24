@@ -32,6 +32,9 @@ codegen/
 # Cloud based storage dotfile
 .MATLABDriveTag
 
+# macOS filesystem files
+.DS_Store
+
 # Personal/Sensitive data folders
 data/
 fet/

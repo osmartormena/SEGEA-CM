@@ -1,37 +1,49 @@
-function M = carregaMatrizes(matrizes)
+function M = carregaMatrizes(matrizes, ativo)
 %carregaMatrizes Carrega e processa os dados das matrizes curriculares do
 %Sistema Acadêmico.
 %   A entrada 'matrizes' é uma string que aponta para um arquivo CSV
 %   contendo todas as matrizes do campus, concatenadas em uma única tabela.
+%   A entrada 'ativo' é uma célula com a discriminação dos períodos ativos
+%   das matrizes curriculares.
 %   É criada uma tabela 'M' com todas as informações das disciplinas ativas
 %   do campus.
 
 % Configuração da importação
 opts = detectImportOptions(matrizes);
-varNames = {'Matriz', 'Codigo', 'Disciplina', 'Modelo'};
+varNames = {'Matriz', 'Periodo', 'Codigo', 'Disciplina', 'Modelo', 'CHT'};
 varTypes = {'string', 'uint8', 'string', 'string', 'string', 'string', ...
     'uint16', 'uint16', 'uint16', 'uint16', 'uint16', 'uint16', ...
-    'string', 'string', 'string', 'string', 'string'};
+    'uint16', 'uint16', 'string', 'string', 'string', 'uint16', 'string'};
 opts.SelectedVariableNames = varNames;
 opts.VariableTypes = varTypes;
 opts.MissingRule = 'omitrow';
-M = readtable(matrizes, opts);
+T = readtable(matrizes, opts);
 
 % Remoção das compontentes curriculares
-M(M.Disciplina=="Disciplina",:) = [];
-M(M.Modelo=="ENADE INGRESSANTE",:) = [];
-M(M.Modelo=="ENADE CONCLUINTE",:) = [];
-M(M.Modelo=="ATIVIDADES COMPLEMENTARES",:) = [];
-M(M.Modelo=="ESTÁGIO",:) = [];
-M(M.Modelo=="TRABALHO DE CONCLUSÃO",:) = [];
-M.Modelo = [];
+T(T.Disciplina=="Disciplina",:) = [];
+T(T.Modelo=="ENADE INGRESSANTE",:) = [];
+T(T.Modelo=="ENADE CONCLUINTE",:) = [];
+T(T.Modelo=="ATIVIDADES COMPLEMENTARES",:) = [];
+T(T.Modelo=="ESTÁGIO",:) = [];
+T(T.Modelo=="TRABALHO DE CONCLUSÃO",:) = [];
+T.Modelo = [];
 
 % Ajuste do formato dos dados
-M.Codigo = erase(M.Codigo, "Turmas");
-M.Codigo = strtrim(M.Codigo);
+T.Codigo = erase(T.Codigo, "Turmas");
+T.Codigo = strtrim(T.Codigo);
+T.CHT = erase(T.CHT, "horas");
+T.CHT = strtrim(T.CHT);
+T.CHT = uint16(str2double(T.CHT));
 
-% Ordenar a Matriz
-M = sortrows(M, {'Codigo','Matriz'});
+% Filtra apenas os períodos ativos das matrizes
+[N, ~] = size(ativo);
+n = 1;
+for i=1:N
+    rows = T(T.Matriz==ativo{i, 1} & any(T.Periodo==ativo{i, 2}, 2), :);
+    [N, ~] = size(rows);
+    M(n:n + N - 1, :) = rows;
+    n = n + N;
+end
 
 % Agrupar duplicatas em múltiplas matrizes
 [N, ~] = size(M);
@@ -46,5 +58,10 @@ while n<N
     n = n + 1;
 end
 M.Matriz = categorical(M.Matriz);
+% M.Periodo = categorical(M.Periodo);
+
+
+% Ordenar a Matriz
+M = sortrows(M, {'Periodo', 'Codigo'});
 
 end

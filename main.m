@@ -9,6 +9,10 @@ ativo = { ...
     "44", [3, 4, 5, 6, 7, 8, 9, 10]; ... Engenharia Eletrônica
     "88", [1, 2]; ... Engenharia Eletrônica
     };
+optativas = { ...
+    "[17]", ["FC32O", "TCFH3ON", "HC32O", "TS32O"]; ... Matriz 44 — Ciências Humanas (2–5)
+    "[23]", ["RB39O", "C439O", "IE39O"]; ... Matriz 44 — Optativas de Aprofundamento (9-10)
+    };
 
 %% Escrita do Preâmbulo do XML
 preambulo = "preambulo.xml";
@@ -19,8 +23,7 @@ fprintf(arquivoFET, "\n");
 fclose(preXML);
 
 %% Escrita da lista de disciplinas
-matrizes = "data/Matrizes.csv";
-M = carregaMatrizes(matrizes, ativo);
+M = carregaMatrizes;
 [numDisciplinas, ~] = size(M);
 fprintf(arquivoFET, "<Subjects_List>\n");
 for n = 1:numDisciplinas

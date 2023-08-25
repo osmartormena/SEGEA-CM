@@ -38,31 +38,3 @@ while n<N
 end
 
 end
-
-% ativo = { ...
-%     "44", [3, 4, 5, 6, 7, 8, 9, 10];    ... Engenharia Eletrônica
-%     "88", [1, 2];                       ... Engenharia Eletrônica
-%     };
-% optativas = { ...
-%     "[17]", ["FC32O", "TCFH3ON", "HC32O", "TS32O"]; ... Matriz 44 — Ciências Humanas (2–5)
-%     "[23]", ["RB39O", "C439O", "IE39O"];            ... Matriz 44 — Optativas de Aprofundamento (9-10)
-%     };
-
-% Filtra apenas os períodos ativos das matrizes
-% [I, ~] = size(ativo);
-% n = 1;
-% for i=1:I
-%     rows = T(T.Matriz==ativo{i, 1} & any(T.Periodo==ativo{i, 2}, 2), :);
-%     [N, ~] = size(rows);
-%     M(n:n + N - 1, :) = rows;
-%     n = n + N;
-% end
-
-% Insere as optativas ativas no semestre
-% [N, ~] = size(optativas);
-% for i=1:N
-%     rows = T(T.OPT==optativas{i, 1} & any(T.OPT==optativas{i, 2}, 2), :);
-%     [nrows, ~] = size(rows);
-%     M(n:n + nrows - 1, :) = rows;
-%     n = n + nrows;
-% end

@@ -5,14 +5,6 @@ clc
 %% Definições gerais
 timestamp = replace(string(datetime), {' ', ':'}, '.');
 saida = join(["fet/utfpr-cm-",timestamp,".fet"], '');
-ativo = { ...
-    "44", [3, 4, 5, 6, 7, 8, 9, 10]; ... Engenharia Eletrônica
-    "88", [1, 2]; ... Engenharia Eletrônica
-    };
-optativas = { ...
-    "[17]", ["FC32O", "TCFH3ON", "HC32O", "TS32O"]; ... Matriz 44 — Ciências Humanas (2–5)
-    "[23]", ["RB39O", "C439O", "IE39O"]; ... Matriz 44 — Optativas de Aprofundamento (9-10)
-    };
 
 %% Escrita do Preâmbulo do XML
 preambulo = "preambulo.xml";
@@ -24,9 +16,9 @@ fclose(preXML);
 
 %% Escrita da lista de disciplinas
 M = carregaMatrizes;
-[numDisciplinas, ~] = size(M);
+[N, ~] = size(M);
 fprintf(arquivoFET, "<Subjects_List>\n");
-for n = 1:numDisciplinas
+for n = 1:N
     fprintf(arquivoFET, "<Subject>\n");
     fprintf(arquivoFET, "\t<Name>%s: %s</Name>\n", M.Codigo(n), ...
         M.Disciplina(n));

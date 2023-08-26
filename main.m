@@ -44,11 +44,33 @@ fprintf(arquivoFET, "<Activities_List>\n");
 fprintf(arquivoFET, "</Activities_List>\n\n");
 
 %% Escrita da lista de prédios
+S = carregaSalas;
+B = categories(S.Bloco);
 fprintf(arquivoFET, "<Buildings_List>\n");
+for n = 1:length(B)
+    fprintf(arquivoFET, "<Building>\n");
+    fprintf(arquivoFET, "\t<Name>Bloco %c</Name>\n", B{n});
+    fprintf(arquivoFET, "\t<Comments></Comments>\n");
+    fprintf(arquivoFET, "</Building>\n");
+end
 fprintf(arquivoFET, "</Buildings_List>\n\n");
 
 %% Escrita da lista de salas
+[N, ~] = size(S);
 fprintf(arquivoFET, "<Rooms_List>\n");
+for n = 1:N
+    fprintf(arquivoFET, "<Room>\n");
+    fprintf(arquivoFET, "\t<Name>%s</Name>\n", S.Sala(n));
+    fprintf(arquivoFET, "\t<Building>Bloco %c</Building>\n", S.Bloco(n));
+    fprintf(arquivoFET, "\t<Capacity>%u</Capacity>\n", S.Capacidade(n));
+    fprintf(arquivoFET, "\t<Virtual>false</Virtual>\n");
+    if ismissing(S.Nome(n))
+        fprintf(arquivoFET, "\t<Comments></Comments>\n");
+    else
+        fprintf(arquivoFET, "\t<Comments>%s</Comments>\n", S.Nome(n));
+    end
+    fprintf(arquivoFET, "</Room>\n");
+end
 fprintf(arquivoFET, "</Rooms_List>\n\n");
 
 %% Escrita da lista de restrições de tempo

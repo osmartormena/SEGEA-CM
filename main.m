@@ -32,7 +32,17 @@ fprintf(arquivoFET, "<Activity_Tags_List>\n");
 fprintf(arquivoFET, "</Activity_Tags_List>\n\n");
 
 %% Escrita da lista de docentes
+P = carregaProfessores;
+[N, ~] = size(P);
 fprintf(arquivoFET, "<Teachers_List>\n");
+for n = 1:N
+    fprintf(arquivoFET, "<Teacher>\n");
+    fprintf(arquivoFET, "\t<Name>%s</Name>\n", P.Nome(n));
+    fprintf(arquivoFET, "\t<Target_Number_of_Hours>%u</Target_Number_of_Hours>\n", ...
+        P.Aulas(n));
+    fprintf(arquivoFET, "\t<Comments>%s</Comments>\n", P.Departamento(n));
+    fprintf(arquivoFET, "</Teacher>\n");
+end
 fprintf(arquivoFET, "</Teachers_List>\n\n");
 
 %% Escrita da lista de turmas
